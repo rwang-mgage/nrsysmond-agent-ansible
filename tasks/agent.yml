@@ -1,0 +1,82 @@
+---
+
+#
+# Installs and configures the New Relic Server agent
+#
+- name: Confirm RedHat lsb util is present
+  yum: name=redhat-lsb-core state=present
+  when: 
+   - os_name|lower == 'redhat'
+   - ansible_distribution_major_version == '6' or ansible_distribution_major_version == '7'
+
+- name: Confirm RedHat lsb util is present
+  yum: name=redhat-lsb state=present
+  when: 
+   - os_name|lower == 'redhat'
+   - ansible_distribution_major_version == '5'
+
+- name: Reread ansible_lsb facts
+  setup: filter=ansible_lsb*
+  when: os_name|lower == 'redhat'
+
+- name: setup agent repo keys
+  apt_key:
+    url: https://download.newrelic.com/548C16BF.gpg
+    state: present
+  when: os_name|lower == 'debian'
+
+- name: setup agent repo keys
+  rpm_key:
+    key: https://download.newrelic.com/548C16BF.gpg
+    state: present
+  when: 
+   - os_name|lower == 'redhat'
+   - os_version == 6 or os_version == 7
+
+- name: setup agent repo keys
+  rpm_key:
+    key: https://download.newrelic.com/548C16BF.gpg
+    state: present
+    validate_certs: False
+  when: 
+   - os_name|lower == 'redhat'
+   - os_version == 5
+
+- name: setup agent repo reference
+  apt_repository:
+    repo: "deb http://apt.newrelic.com/debian/ newrelic non-free"
+    state: present
+  when: os_name|lower == 'debian'
+
+- name: setup agent repo reference
+  yum_repository:
+    baseurl: "http://yum.newrelic.com/pub/newrelic/el5/$basearch"
+    gpgcheck: yes
+    gpgkey: https://download.newrelic.com/548C16BF.gpg
+    name: 'newrelic'
+    #repo_gpgcheck: yes
+    state: present
+    description: newrelic
+  when: os_name|lower == 'redhat'
+
+- name: install agent
+  yum:
+    name: "newrelic-sysmond{{ agent_version }}"
+    state: "{{ agent_state }}"
+  when: os_name|lower == 'redhat'
+
+- name: install agent
+  apt:
+    name: "newrelic-sysmond{{ agent_version }}"
+    state: "{{ agent_state }}"
+    update_cache: yes
+  when: os_name|lower == 'debian'
+
+- name: setup agent config
+  template: src=newrelic.yml.j2 dest=/etc/newrelic/nrsysmond.cfg
+  notify: restart nrsysmond
+  when: agent_state != "absent"
+
+- name: setup agent service
+  service: name=newrelic-sysmond state=started enabled=yes
+  when: agent_state != "absent"
