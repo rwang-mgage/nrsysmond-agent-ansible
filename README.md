@@ -1,11 +1,11 @@
-# nwsysmon-agent-ansible
+# nrsysmon-agent-ansible
 
 #### Table of Contents
 
 1. [Description](#description)
-2. [Setup - The basics of getting started with nwsysmon-agent-ansible](#setup)
-    * [What nwsysmon-agent-ansible affects](#what-nwsysmon-agent-ansible-affects)
-    * [Beginning with nwsysmon-agent-ansible](#beginning-with-nwsysmon-agent-ansible)
+2. [Setup - The basics of getting started with nrsysmon-agent-ansible](#setup)
+    * [What nrsysmon-agent-ansible affects](#what-nrsysmon-agent-ansible-affects)
+    * [Beginning with nrsysmon-agent-ansible](#beginning-with-nrsysmon-agent-ansible)
 3. [Usage - Configuration options and additional functionality](#usage)
 4. [Reference - An under-the-hood peek at what the role is doing and how](#reference)
 5. [Limitations - OS compatibility, etc.](#limitations)
@@ -19,18 +19,18 @@ place for your own customized workflow.
 
 ## Setup
 
-### What nwsysmon-agent-ansible affects
+### What nrsysmon-agent-ansible affects
 
 - Adds the New Relic Infrastructure package repository source
 - Installs and configures the New Relic Infrastructure agent
 
-### Beginning with nwsysmon-agent-ansible
+### Beginning with nrsysmon-agent-ansible
 
 Include the role in your playbook. Customize the required variables.
 
 ## Usage
 
-All typical interactions with `nwsysmon-agent-ansible` will be done through role configuration.
+All typical interactions with `nrsysmon-agent-ansible` will be done through role configuration.
 
 ### Installing the Infrastructure agent
 
@@ -38,7 +38,7 @@ All typical interactions with `nwsysmon-agent-ansible` will be done through role
 ---
 hosts: ap_ne_1
 roles:
-  - { role: nwsysmon-agent-ansible, license_key: YOUR_LICENSE_KEY }
+  - { role: nrsysmon-agent-ansible, license_key: YOUR_LICENSE_KEY }
 ```
 
 ## Reference
